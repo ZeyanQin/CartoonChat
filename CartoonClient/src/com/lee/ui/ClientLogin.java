@@ -6,17 +6,21 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashMap;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
 
 import com.lee.util.CartoonUtil;
 
@@ -32,6 +36,7 @@ public class ClientLogin extends JFrame {
 	private JPanel contentPanel ;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private JButton loginButton;
 
 
 	public static void main(String[] args) {
@@ -42,6 +47,9 @@ public class ClientLogin extends JFrame {
 		});
 	}
 	
+	/**
+	 * constructor , function realization 
+	 */
 	public ClientLogin() {
 		setTitle("Cartoon chat       Author:Andylee");
 		setBounds(350, 250, LOGIN_WIDTH, LOGIN_HEIGHT);
@@ -71,7 +79,7 @@ public class ClientLogin extends JFrame {
 		passwordField.setOpaque(false);
 		contentPanel.add(passwordField);
 		
-		final JButton loginButton = new JButton();
+		loginButton = new JButton();
 		loginButton.setIcon(new ImageIcon("images/login.jpg"));
 		loginButton.setBounds(236, 227, 50, 25);
 		getRootPane().setDefaultButton(loginButton);
@@ -95,8 +103,36 @@ public class ClientLogin extends JFrame {
 				File file = new File("users.properties");
 				CartoonUtil.loadPro(userProperties, file);
 				String userName = textField.getText();
+				String password = new String(passwordField.getPassword());
 				if (file.length() != 0) {
-					
+					if (userProperties.containsKey(userName)) {
+						if (userProperties.getProperty(userName).equalsIgnoreCase(password)) {						
+							
+							try {
+								Socket socket = new Socket("127.0.0.1", 8888);
+								new ChatRoom(userName,socket);
+								loginButton.setEnabled(false);
+								setVisible(false);
+								
+							} catch (UnknownHostException e1) {
+								e1.printStackTrace();
+								disErroMessage("connect server failed,plase try again");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+								disErroMessage("connect server failed,plase try again");
+							}
+							
+						} else {
+							promptLabel.setText("Password is wrong");
+							passwordField.setText("");
+							passwordField.requestFocus();
+						}
+						
+					} else {
+						promptLabel.setText("User doesn't exist!");
+						textField.setText("");
+						textField.requestFocus();
+					}
 				} else {
 					promptLabel.setText("You enter user name doesn't exit!");
 					textField.setText("");
@@ -105,17 +141,28 @@ public class ClientLogin extends JFrame {
 				}
 				
 			}
+
 		});
 		
 		registerButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-
+				registerButton.setEnabled(false);
+				new ClientRegister();
+				setVisible(false);// hide login screen
 				
 			}
 		});
 		
 		setVisible(true);
+	}
+	
+	
+	private void disErroMessage(String string) {
+		JOptionPane.showMessageDialog(contentPanel, string, "Error Message",
+				JOptionPane.ERROR_MESSAGE);
+		loginButton.setEnabled(true);
+		loginButton.requestFocus();
 	}
 }
 

@@ -1,9 +1,10 @@
 package com.lee.function;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class CartoonBean {
+public class CartoonBean implements Serializable {
 	private ClientRequst type;
 	private HashSet<String> to;
 	private HashSet<String> clients;
