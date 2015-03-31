@@ -109,7 +109,7 @@ public class ClientLogin extends JFrame {
 						if (userProperties.getProperty(userName).equalsIgnoreCase(password)) {						
 							
 							try {
-								Socket socket = new Socket("127.0.0.1", 8888);
+								Socket socket = new Socket("127.0.0.1", 6666);
 								new ChatRoom(userName,socket);
 								loginButton.setEnabled(false);
 								setVisible(false);

@@ -1,9 +1,11 @@
 package com.lee.function;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class CartoonBean {
+public class CartoonBean implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private ClientRequst type;
 	private HashSet<String> to;
 	private HashSet<String> clients;
@@ -81,6 +83,4 @@ public class CartoonBean {
 	public void setClients(HashSet<String> clients) {
 		this.clients = clients;
 	}
-	
-	
 }

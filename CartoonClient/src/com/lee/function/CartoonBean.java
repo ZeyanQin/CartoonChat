@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class CartoonBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private ClientRequst type;
 	private HashSet<String> to;
 	private HashSet<String> clients;

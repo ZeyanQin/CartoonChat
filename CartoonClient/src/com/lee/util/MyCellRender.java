@@ -13,6 +13,9 @@ import javax.swing.ListCellRenderer;
 @SuppressWarnings("serial")
 public class MyCellRender extends JLabel implements ListCellRenderer<String>{
 
+	public MyCellRender() {
+		setOpaque(true);
+	}
 	public Component getListCellRendererComponent(JList<? extends String> list,
 			String value, int index, boolean isSelected, boolean cellHasFocus) {
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));// add empty border
